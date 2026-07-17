@@ -1,12 +1,17 @@
 package com.mehrzad.taskmanager.entity;
 
+import com.mehrzad.taskmanager.enums.TaskPriority;
+import com.mehrzad.taskmanager.enums.TaskStatus;
 import jakarta.persistence.*;
+import lombok.Data;
+
 import java.time.LocalDateTime;
 
 import java.util.Date;
 
 @Entity
 @Table(name = "TASKS")
+@Data
 public class Task {
 
     @Id
@@ -17,11 +22,12 @@ public class Task {
     private String title;
 
     private String description;
-
-    private String priority;
+    @Enumerated(EnumType.STRING)
+    private TaskPriority priority;
 
     @Column(nullable = false)
-    private String status;
+    @Enumerated(EnumType.STRING)
+    private TaskStatus status;
 
     @Column(nullable = false)
     private LocalDateTime createdAt;

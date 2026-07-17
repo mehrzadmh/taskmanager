@@ -1,16 +1,17 @@
 package com.mehrzad.taskmanager.mapper;
 
-import com.mehrzad.taskmanager.dto.UserCreateRequest;
-import com.mehrzad.taskmanager.dto.UserResponse;
-import com.mehrzad.taskmanager.dto.UserUpdateRequest;
+import com.mehrzad.taskmanager.dto.request.create.UserCreateRequest;
+import com.mehrzad.taskmanager.dto.response.UserResponse;
+import com.mehrzad.taskmanager.dto.request.update.UserUpdateRequest;
 import com.mehrzad.taskmanager.entity.User;
+import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.List;
-
+@Component
 public final class UserMapper {
 
-    public static User toEntity(UserCreateRequest request) {
+    public  User toEntity(UserCreateRequest request) {
 
         User user = new User();
 
@@ -22,7 +23,7 @@ public final class UserMapper {
         return user;
     }
 
-    public static UserResponse toResponse(User user) {
+    public  UserResponse toResponse(User user) {
 
         UserResponse response = new UserResponse();
 
@@ -36,7 +37,7 @@ public final class UserMapper {
     }
 
 
-    public static List<UserResponse> toResponseList(List<User> users) {
+    public  List<UserResponse> toResponseList(List<User> users) {
 
         List<UserResponse> responses = new ArrayList<>();
 
@@ -48,7 +49,7 @@ public final class UserMapper {
     }
 
 
-    public static void updateEntity(
+    public  void updateEntity(
             User user,
             UserUpdateRequest request){
 

@@ -1,11 +1,8 @@
 package com.mehrzad.taskmanager.controller;
 
-import com.mehrzad.taskmanager.dto.UserCreateRequest;
-import com.mehrzad.taskmanager.dto.UserResponse;
-import com.mehrzad.taskmanager.dto.UserUpdateRequest;
-import com.mehrzad.taskmanager.entity.User;
-import com.mehrzad.taskmanager.exception.UserNotFoundException;
-import com.mehrzad.taskmanager.mapper.UserMapper;
+import com.mehrzad.taskmanager.dto.request.create.UserCreateRequest;
+import com.mehrzad.taskmanager.dto.response.UserResponse;
+import com.mehrzad.taskmanager.dto.request.update.UserUpdateRequest;
 import com.mehrzad.taskmanager.service.UserService;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;

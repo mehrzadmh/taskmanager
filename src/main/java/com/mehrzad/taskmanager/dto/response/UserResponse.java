@@ -1,4 +1,4 @@
-package com.mehrzad.taskmanager.dto;
+package com.mehrzad.taskmanager.dto.response;
 
 public class UserResponse {
 

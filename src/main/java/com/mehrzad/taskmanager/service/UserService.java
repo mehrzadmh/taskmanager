@@ -1,8 +1,8 @@
 package com.mehrzad.taskmanager.service;
 
-import com.mehrzad.taskmanager.dto.UserCreateRequest;
-import com.mehrzad.taskmanager.dto.UserResponse;
-import com.mehrzad.taskmanager.dto.UserUpdateRequest;
+import com.mehrzad.taskmanager.dto.request.create.UserCreateRequest;
+import com.mehrzad.taskmanager.dto.response.UserResponse;
+import com.mehrzad.taskmanager.dto.request.update.UserUpdateRequest;
 import com.mehrzad.taskmanager.entity.User;
 import com.mehrzad.taskmanager.exception.DuplicateEmailException;
 import com.mehrzad.taskmanager.exception.UserNotFoundException;
@@ -15,30 +15,32 @@ import java.util.List;
 public class UserService {
 
     private final UserRepository userRepository;
-
-    public UserService( UserRepository userRepository) {
+    private final UserMapper userMapper;
+    public UserService( UserRepository userRepository,
+                        UserMapper userMapper) {
         this.userRepository = userRepository;
+        this.userMapper = userMapper;
     }
 
     public  UserResponse saveUser(UserCreateRequest request){
-        User user = UserMapper.toEntity(request);
+        User user = userMapper.toEntity(request);
         if(userRepository.existsByEmail(user.getEmail())){
             throw new DuplicateEmailException();
         }
 
-        return UserMapper.toResponse(userRepository.save(user));
+        return userMapper.toResponse(userRepository.save(user));
     }
 
     public List<UserResponse> getAllUsers() {
 
-        return UserMapper.toResponseList(userRepository.findAll());
+        return userMapper.toResponseList(userRepository.findAll());
     }
 
     public UserResponse getUserById(Long id) {
 
         User user = userRepository.findById(id)
                 .orElseThrow(UserNotFoundException::new);
-        return  UserMapper.toResponse(user);
+        return  userMapper.toResponse(user);
 
     }
 
@@ -58,8 +60,8 @@ public class UserService {
             throw new DuplicateEmailException();
         }
 
-        UserMapper.updateEntity(user, request);
-        return UserMapper.toResponse(userRepository.save(user));
+        userMapper.updateEntity(user, request);
+        return userMapper.toResponse(userRepository.save(user));
 
     }
 
