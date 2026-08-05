@@ -25,6 +25,9 @@ public class User {
     @Column(unique = true)
     private String email;
 
+    @Column(nullable = false)
+    private String password;
+
     @OneToMany(mappedBy = "user")
     private List<Task> tasks;
 }

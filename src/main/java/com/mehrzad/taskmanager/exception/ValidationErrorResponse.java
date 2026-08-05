@@ -1,7 +1,7 @@
 package com.mehrzad.taskmanager.exception;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Map;
 
 public class ValidationErrorResponse {
 
@@ -9,11 +9,11 @@ public class ValidationErrorResponse {
 
     private final int status;
 
-    private final List<String> errors;
+    private final Map<String,String> errors;
 
     public ValidationErrorResponse(LocalDateTime timestamp,
                                    int status,
-                                   List<String> errors) {
+                                   Map<String,String> errors) {
 
         this.timestamp = timestamp;
         this.status = status;
@@ -28,7 +28,7 @@ public class ValidationErrorResponse {
         return status;
     }
 
-    public List<String> getErrors() {
+    public Map<String,String> getErrors() {
         return errors;
     }
 }

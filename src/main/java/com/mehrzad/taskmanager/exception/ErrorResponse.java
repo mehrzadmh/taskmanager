@@ -10,15 +10,23 @@ public class ErrorResponse {
 
     final private String message;
 
+    final private String path;
+
+    final  private String error;
+
 
 
     public ErrorResponse(LocalDateTime timestamp,
                          int status,
-                         String message) {
+                         String message,
+                         String path,
+                         String error) {
 
         this.timestamp = timestamp;
         this.status = status;
         this.message = message;
+        this.path = path;
+        this.error = error;
 
     }
 
@@ -32,6 +40,13 @@ public class ErrorResponse {
 
     public String getMessage() {
         return message;
+    }
+
+    public String getPath() {
+        return path;
+    }
+    public String getError() {
+        return error;
     }
 
 

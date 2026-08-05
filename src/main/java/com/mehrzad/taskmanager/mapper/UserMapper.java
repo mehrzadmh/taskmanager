@@ -1,6 +1,7 @@
 package com.mehrzad.taskmanager.mapper;
 
 import com.mehrzad.taskmanager.dto.request.create.UserCreateRequest;
+import com.mehrzad.taskmanager.dto.response.LoginResponse;
 import com.mehrzad.taskmanager.dto.response.UserResponse;
 import com.mehrzad.taskmanager.dto.request.update.UserUpdateRequest;
 import com.mehrzad.taskmanager.entity.User;
@@ -19,6 +20,7 @@ public final class UserMapper {
         user.setLastName(request.getLastName());
         user.setEmail(request.getEmail());
         user.setFatherName(request.getFatherName());
+        user.setPassword(request.getPassword());
 
         return user;
     }
@@ -61,6 +63,20 @@ public final class UserMapper {
 
         user.setEmail(request.getEmail());
 
+        user.setPassword(request.getPassword());
+
+    }
+
+    public LoginResponse toLoginResponse(User user){
+
+        LoginResponse response = new LoginResponse();
+
+        response.setId(user.getId());
+        response.setFirstName(user.getFirstName());
+        response.setLastName(user.getLastName());
+        response.setEmail(user.getEmail());
+
+        return response;
     }
 
 
