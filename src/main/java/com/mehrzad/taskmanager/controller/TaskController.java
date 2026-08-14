@@ -3,6 +3,8 @@ package com.mehrzad.taskmanager.controller;
 import com.mehrzad.taskmanager.dto.request.create.TaskCreateRequest;
 import com.mehrzad.taskmanager.dto.request.update.TaskUpdateRequest;
 import com.mehrzad.taskmanager.dto.response.TaskResponse;
+import com.mehrzad.taskmanager.enums.TaskPriority;
+import com.mehrzad.taskmanager.enums.TaskStatus;
 import com.mehrzad.taskmanager.service.TaskService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -50,6 +52,17 @@ public class TaskController {
     public ResponseEntity<Void> deleteTask(@PathVariable Long id){
         taskService.deleteTask(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @GetMapping("/search")
+    public ResponseEntity<List<TaskResponse>> searchTasks(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) TaskStatus status,
+            @RequestParam(required = false) TaskPriority priority) {
+
+        return ResponseEntity.ok(
+                taskService.searchTasks(title, status, priority)
+        );
     }
 
 }

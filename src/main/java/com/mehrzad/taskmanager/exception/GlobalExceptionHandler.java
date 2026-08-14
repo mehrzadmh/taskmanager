@@ -47,6 +47,18 @@ public class GlobalExceptionHandler {
         return buildErrorResponse(HttpStatus.CONFLICT, ex.getMessage(), request);
     }
 
+    @ExceptionHandler(UserNotAllowToDelete.class)
+    public ResponseEntity<ErrorResponse> handleUserNotAllowToDelete(
+            UserNotAllowToDelete ex,
+            HttpServletRequest request) {
+
+        return buildErrorResponse(
+                HttpStatus.CONFLICT,
+                ex.getMessage(),
+                request
+        );
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ValidationErrorResponse> handleValidationException(
             MethodArgumentNotValidException ex) {
@@ -68,6 +80,9 @@ public class GlobalExceptionHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(response);
     }
+
+
+
 
     private ResponseEntity<ErrorResponse> buildErrorResponse(
             HttpStatus status,

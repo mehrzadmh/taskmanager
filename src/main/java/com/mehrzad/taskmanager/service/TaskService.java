@@ -5,14 +5,20 @@ import com.mehrzad.taskmanager.dto.request.update.TaskUpdateRequest;
 import com.mehrzad.taskmanager.dto.response.TaskResponse;
 import com.mehrzad.taskmanager.entity.Task;
 import com.mehrzad.taskmanager.entity.User;
+import com.mehrzad.taskmanager.enums.TaskPriority;
+import com.mehrzad.taskmanager.enums.TaskStatus;
 import com.mehrzad.taskmanager.exception.DuplicateTitleException;
 import com.mehrzad.taskmanager.exception.TaskNotFoundException;
 import com.mehrzad.taskmanager.mapper.TaskMapper;
 import com.mehrzad.taskmanager.repository.TaskRepository;
 import com.mehrzad.taskmanager.repository.UserRepository;
+import com.mehrzad.taskmanager.specification.TaskSpecification;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import com.mehrzad.taskmanager.exception.UserNotFoundException;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -39,6 +45,9 @@ public class TaskService {
         }
 
         Task task = taskMapper.toEntity(request);
+
+        task.setCreatedAt(LocalDateTime.now());
+        task.setStatus(TaskStatus.TODO);
 
         task.setUser(user);
 
@@ -68,7 +77,7 @@ public class TaskService {
 
 
 
-
+    @Transactional
     public TaskResponse updateTask(Long id, TaskUpdateRequest request ){
 
         Task task = taskRepository.findById(id)
@@ -82,4 +91,21 @@ public class TaskService {
         return taskMapper.toResponse(taskRepository.save(task));
 
     }
+
+    public List<TaskResponse> searchTasks(
+            String title,
+            TaskStatus status,
+            TaskPriority priority) {
+
+        Specification<Task> specification =
+                         TaskSpecification.hasTitle(title)
+                        .and(TaskSpecification.hasStatus(status))
+                        .and(TaskSpecification.hasPriority(priority));
+
+        List<Task> tasks = taskRepository.findAll(specification);
+
+        return taskMapper.toResponseList(tasks);
+    }
+
+
 }

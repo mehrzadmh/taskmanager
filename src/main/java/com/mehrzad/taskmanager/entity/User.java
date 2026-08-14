@@ -2,6 +2,8 @@ package com.mehrzad.taskmanager.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
+import org.apache.logging.log4j.util.Lazy;
+
 import java.util.List;
 
 @Entity
@@ -28,6 +30,10 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
     private List<Task> tasks;
+
+    @Version
+    @Column(nullable = false)
+    private Long version;
 }
