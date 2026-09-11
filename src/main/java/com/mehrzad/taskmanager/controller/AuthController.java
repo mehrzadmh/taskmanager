@@ -12,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 
 @Tag(name = "Auth Management", description = "Auth Management APIs")
 @RestController
@@ -30,5 +32,15 @@ public class AuthController {
 
 
         return ResponseEntity.ok(authService.authLogin(request));
+    }
+
+    @Operation(summary = "Verify user account")
+    @GetMapping("/verify")
+    public ResponseEntity<String> verifyAccount(
+            @RequestParam String token) {
+
+        authService.verifyAccount(token);
+
+        return ResponseEntity.ok("Your account has been successfully verified.");
     }
 }

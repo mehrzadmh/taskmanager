@@ -15,6 +15,8 @@ import com.mehrzad.taskmanager.repository.TaskRepository;
 import com.mehrzad.taskmanager.repository.UserRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 import java.util.List;
 
@@ -49,11 +51,26 @@ public class UserService {
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
-        emailService.sendWelcomeEmail(user.getEmail());
-
         user.setRole(Role.USER);
 
-        return userMapper.toResponse(userRepository.save(user));
+        user.setEnabled(false);
+
+        String token = UUID.randomUUID().toString();
+
+        user.setVerificationToken(token);
+
+        user.setVerificationTokenExpireAt(
+                LocalDateTime.now().plusHours(24)
+        );
+
+        User savedUser = userRepository.save(user);
+
+        emailService.sendVerificationEmail(
+                savedUser.getEmail(),
+                token
+        );
+
+        return userMapper.toResponse(savedUser);
     }
 
     public List<UserResponse> getAllUsers() {

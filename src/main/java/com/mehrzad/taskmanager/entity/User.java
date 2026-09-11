@@ -41,4 +41,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
+
+
+    @Column(nullable = false)
+    private boolean enabled = false;
+
+    @Column(unique = true)
+    private String verificationToken;
+
+    @Column
+    private java.time.LocalDateTime verificationTokenExpireAt;
 }

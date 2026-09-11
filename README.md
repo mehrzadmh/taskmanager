@@ -1,38 +1,98 @@
-# Task Manager API
+# 📌 Task Manager API
 
-A RESTful Task Management application built with Spring Boot following a layered architecture.
+A production-style Task Management REST API built with **Spring Boot 3** following clean architecture principles and best practices.
 
-## 🚀 Features
-
-- User Registration & Login
-- JWT Authentication
-- Role-Based Authorization
-- Task CRUD Operations
-- Pagination & Sorting
-- Dynamic Search using Spring Specifications
-- Input Validation
-- Global Exception Handling
-- Swagger/OpenAPI Documentation
-- Docker Support
+This project demonstrates modern backend development concepts including authentication, authorization, email verification, Docker, and Oracle Database integration.
 
 ---
 
-## 🛠️ Tech Stack
+# 🚀 Features
+
+## Authentication & Security
+
+- JWT Authentication
+- BCrypt Password Encryption
+- Email Verification
+- Asynchronous Email Sending
+- Role-Based Authorization (ADMIN / USER)
+- Stateless Authentication with Spring Security
+
+---
+
+## User Management
+
+- Register User
+- Login
+- Update User
+- Delete User
+- Get User By Id
+- Get All Users
+
+---
+
+## Task Management
+
+- Create Task
+- Update Task
+- Delete Task
+- Search Tasks
+- Pagination
+- Sorting
+- Dynamic Filtering using JPA Specifications
+
+---
+
+## Validation & Exception Handling
+
+- Bean Validation
+- Global Exception Handler
+- Custom Business Exceptions
+- Consistent Error Response Structure
+
+---
+
+## Documentation
+
+- Swagger UI
+- OpenAPI 3
+
+---
+
+## Database
+
+- Oracle Database
+- Spring Data JPA
+- Hibernate
+- Optimistic Locking (@Version)
+
+---
+
+## DevOps
+
+- Dockerized Application
+- Docker Image
+- Docker Container
+- Oracle Connectivity inside Docker
+
+---
+
+# 🛠 Tech Stack
 
 - Java 17
-- Spring Boot
+- Spring Boot 3
 - Spring Security
-- JWT
 - Spring Data JPA
 - Hibernate
 - Oracle Database
-- Docker
+- JWT
+- Lombok
 - Maven
-- Swagger (OpenAPI)
+- Docker
+- Swagger / OpenAPI
 
 ---
 
-## 📁 Project Structure
+# 📂 Project Structure
 
 ```
 src
@@ -44,26 +104,25 @@ src
  ├── mapper
  ├── security
  ├── exception
- └── configuration
+ ├── specification
+ └── config
 ```
 
 ---
 
-## 🔐 Authentication
+# 📖 API Documentation
 
-The project uses JWT (JSON Web Token) authentication.
-
-Protected endpoints require:
+Swagger UI
 
 ```
-Authorization: Bearer <your_token>
+http://localhost:8080/swagger-ui/index.html
 ```
 
 ---
 
-## 🐳 Docker
+# 🐳 Docker
 
-Build Docker Image
+Build Image
 
 ```bash
 docker build -t taskmanager .
@@ -77,16 +136,57 @@ docker run -d -p 8080:8080 taskmanager
 
 ---
 
-## 📖 API Documentation
+# 🔐 Authentication Flow
 
-Swagger UI
-
-```
-http://localhost:8080/swagger-ui/index.html
+```text
+Register
+      │
+      ▼
+Verification Email
+      │
+      ▼
+Click Verification Link
+      │
+      ▼
+Account Activated
+      │
+      ▼
+Login
+      │
+      ▼
+JWT Token
+      │
+      ▼
+Authorized Requests
 ```
 
 ---
 
-## 📌 Status
+# 📸 Screenshots
 
-This project is under active development and is continuously being improved.
+- Swagger UI
+- Docker Container Running
+![docker.Intelij.Swagger.png](..%2F..%2Fdocker.Intelij.Swagger.png)
+---
+- Email Verification
+![EmailVerification.PNG](..%2F..%2FEmailVerification.PNG)
+# Future Improvements
+
+- Refresh Token
+- Forgot Password
+- Reset Password
+- Unit Testing
+- Integration Testing
+- CI/CD Pipeline
+
+---
+
+# Author
+
+**Mehrzad Hajkhalil**
+
+Java Backend Developer
+
+GitHub
+
+https://github.com/mehrzadmh
