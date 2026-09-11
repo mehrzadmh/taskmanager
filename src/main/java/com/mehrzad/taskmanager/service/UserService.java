@@ -5,6 +5,7 @@ import com.mehrzad.taskmanager.dto.request.update.UserUpdateRequest;
 import com.mehrzad.taskmanager.dto.response.UserResponse;
 import com.mehrzad.taskmanager.entity.Task;
 import com.mehrzad.taskmanager.entity.User;
+import com.mehrzad.taskmanager.enums.Role;
 import com.mehrzad.taskmanager.enums.TaskStatus;
 import com.mehrzad.taskmanager.exception.DuplicateEmailException;
 import com.mehrzad.taskmanager.exception.UserNotAllowToDelete;
@@ -49,6 +50,8 @@ public class UserService {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
 
         emailService.sendWelcomeEmail(user.getEmail());
+
+        user.setRole(Role.USER);
 
         return userMapper.toResponse(userRepository.save(user));
     }

@@ -7,17 +7,21 @@ import com.mehrzad.taskmanager.entity.Task;
 import com.mehrzad.taskmanager.entity.User;
 import com.mehrzad.taskmanager.enums.TaskPriority;
 import com.mehrzad.taskmanager.enums.TaskStatus;
+import com.mehrzad.taskmanager.exception.AccessDeniedException;
 import com.mehrzad.taskmanager.exception.DuplicateTitleException;
 import com.mehrzad.taskmanager.exception.TaskNotFoundException;
 import com.mehrzad.taskmanager.mapper.TaskMapper;
 import com.mehrzad.taskmanager.repository.TaskRepository;
-import com.mehrzad.taskmanager.repository.UserRepository;
+import com.mehrzad.taskmanager.security.SecurityUser;
+import com.mehrzad.taskmanager.security.SecurityUtils;
 import com.mehrzad.taskmanager.specification.TaskSpecification;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
-import com.mehrzad.taskmanager.exception.UserNotFoundException;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -26,21 +30,24 @@ public class TaskService {
 
     private final TaskMapper taskMapper;
     private  final TaskRepository taskRepository;
-    private final  UserRepository userRepository;
 
-    public TaskService(TaskRepository taskRepository, TaskMapper taskMapper, UserRepository userRepository) {
+
+    public TaskService(TaskRepository taskRepository, TaskMapper taskMapper) {
         this.taskMapper = taskMapper;
         this.taskRepository = taskRepository;
-        this.userRepository = userRepository;
     }
 
 
-    public TaskResponse saveTask(TaskCreateRequest request){
+    public TaskResponse saveTask(TaskCreateRequest request) {
 
-        User user = userRepository.findById(request.getUserId())
-                .orElseThrow(UserNotFoundException::new);
+        SecurityUser securityUser = SecurityUtils.getCurrentUser();
 
-        if(taskRepository.existsByTitleAndUserId(request.getTitle(), request.getUserId())){
+        User user = securityUser.getUser();
+
+        if (taskRepository.existsByTitleAndUserId(
+                request.getTitle(),
+                user.getId())) {
+
             throw new DuplicateTitleException();
         }
 
@@ -48,22 +55,37 @@ public class TaskService {
 
         task.setCreatedAt(LocalDateTime.now());
         task.setStatus(TaskStatus.TODO);
-
         task.setUser(user);
 
         return taskMapper.toResponse(taskRepository.save(task));
     }
 
 
-    public List<TaskResponse> getAllTasks() {
+    public Page<TaskResponse> getAllTasks(
+            int page,
+            int size,
+            String sortBy,
+            String direction
+    ) {
 
-        return taskMapper.toResponseList(taskRepository.findAll());
+        Sort sort = direction.equalsIgnoreCase("desc")
+                ? Sort.by(sortBy).descending()
+                : Sort.by(sortBy).ascending();
+
+        Pageable pageable =
+                PageRequest.of(page, size, sort);
+
+        Page<Task> tasks =
+                taskRepository.findAll(pageable);
+
+        return tasks.map(taskMapper::toResponse);
     }
 
     public TaskResponse getTaskById(Long id) {
 
         Task task = taskRepository.findById(id)
                 .orElseThrow(TaskNotFoundException::new);
+        validateTaskOwner(task);
         return  taskMapper.toResponse(task);
 
     }
@@ -72,7 +94,17 @@ public class TaskService {
 
         Task task = taskRepository.findById(id)
                 .orElseThrow(TaskNotFoundException::new);
+        validateTaskOwner(task);
         taskRepository.delete(task);
+    }
+
+    private void validateTaskOwner(Task task) {
+
+        SecurityUser currentUser = SecurityUtils.getCurrentUser();
+
+        if (!task.getUser().getId().equals(currentUser.getUser().getId())) {
+            throw new AccessDeniedException();
+        }
     }
 
 
@@ -82,7 +114,7 @@ public class TaskService {
 
         Task task = taskRepository.findById(id)
                 .orElseThrow(TaskNotFoundException::new);
-
+        validateTaskOwner(task);
         if(taskRepository.existsByTitleAndUserIdAndIdNot(request.getTitle(), task.getUser().getId(), task.getId())){
             throw new DuplicateTitleException();
         }
@@ -103,7 +135,6 @@ public class TaskService {
                         .and(TaskSpecification.hasPriority(priority));
 
         List<Task> tasks = taskRepository.findAll(specification);
-
         return taskMapper.toResponseList(tasks);
     }
 

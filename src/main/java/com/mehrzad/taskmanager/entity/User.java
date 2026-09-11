@@ -1,5 +1,6 @@
 package com.mehrzad.taskmanager.entity;
 
+import com.mehrzad.taskmanager.enums.Role;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.apache.logging.log4j.util.Lazy;
@@ -36,4 +37,8 @@ public class User {
     @Version
     @Column(nullable = false)
     private Long version;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private Role role;
 }

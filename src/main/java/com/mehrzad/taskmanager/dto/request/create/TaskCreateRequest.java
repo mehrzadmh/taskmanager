@@ -17,8 +17,7 @@ public class TaskCreateRequest {
     @NotNull(message = "Priority is required")
     private TaskPriority priority;
 
-    @NotNull(message = "UserID is required")
-    private Long userId;
+
 
     public String getTitle() {
         return title;
@@ -44,11 +43,4 @@ public class TaskCreateRequest {
         this.priority = priority;
     }
 
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
 }
