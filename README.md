@@ -164,12 +164,24 @@ Authorized Requests
 
 # 📸 Screenshots
 
-- Swagger UI
-- Docker Container Running
-![docker.Intelij.Swagger.png](..%2F..%2Fdocker.Intelij.Swagger.png)
+## 🔹 Dockerized Application
+
+The application is successfully containerized using Docker and runs with Oracle Database connectivity.
+
+<p align="center">
+  <img src="images/docker.Intelij.Swagger.png" width="900"/>
+</p>
+
 ---
-- Email Verification
-![EmailVerification.PNG](..%2F..%2FEmailVerification.PNG)
+
+## 🔹 Email Verification
+
+After user registration, a verification email is sent automatically. The account becomes active only after clicking the verification link.
+
+<p align="center">
+  <img src="images/EmailVerification.PNG" width="700"/>
+</p>
+
 # Future Improvements
 
 - Refresh Token
