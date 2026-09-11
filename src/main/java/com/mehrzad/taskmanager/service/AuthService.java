@@ -25,16 +25,20 @@ public class AuthService {
     private final JwtService jwtService;
     private final PasswordEncoder passwordEncoder;
 
+    private final EmailService emailService;
+
     public AuthService(
             UserRepository userRepository,
             UserMapper userMapper,
             JwtService jwtService,
-            PasswordEncoder passwordEncoder) {
+            PasswordEncoder passwordEncoder,
+            EmailService emailService) {
 
         this.userRepository = userRepository;
         this.userMapper = userMapper;
         this.jwtService = jwtService;
         this.passwordEncoder = passwordEncoder;
+        this.emailService = emailService;
     }
 
     public LoginResponse authLogin(LoginRequest request) {
@@ -80,5 +84,7 @@ public class AuthService {
         user.setVerificationTokenExpireAt(null);
 
         userRepository.save(user);
+
+        emailService.sendWelcomeEmail(user.getEmail());
     }
 }
